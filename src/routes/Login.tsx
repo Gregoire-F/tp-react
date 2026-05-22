@@ -1,26 +1,55 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
-export interface ProtectedRoutesPropsI {
-    token: string;
-}
+import type { ChangeEvent, FormEvent } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useAppDispatch } from "../store/store";
+import { setCredentials } from "../store/authSlice";
 
-export default function Login({token}: ProtectedRoutesPropsI){
-    const navigate = useNavigate
-    useEffect (() => {
-        fetch('http://localhost:5173/login', {
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'include',
-            headers: {Authorization : token}
-        })
-        .then(res => {if (!res.ok) navigate(); return res.json()})
-    }, [])
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: ChangeEvent) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const res = await fetch(
+        "https://badger.arcplex.dev/api/v2/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await res.json();
+      dispatch(setCredentials({ token: data.token, user: email }));
+      navigate("/");
+    } catch (err) {
+    }
+  };
 
   return (
-    <form>
-      <input type="text" placeholder="Log in" />
-      <input type="password" placeholder="Password" />
-      <button type="submit">Log in</button>
+    <form onSubmit={handleSubmit}>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Mot de passe"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit">Se connecter</button>
     </form>
-  )
+  );
 }
