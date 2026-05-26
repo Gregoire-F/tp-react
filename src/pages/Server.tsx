@@ -9,6 +9,7 @@ interface Server {
   ram: number;
   os: string;
   subnet: string;
+  stock: number;
 
 }
 
@@ -37,8 +38,9 @@ export default function Server() {
             {server.name} -
             {server.cpu} coeurs -
             {server.ram} Go -
-            {server.os} - 
             {server.subnet} -
+            {server.os} 
+            {server.stock} Go
           </li>
         ))}
       </ul>
