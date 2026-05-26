@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { apiGet } from "../lib/api";
-// import { useAppSelector } from "../store/store";
 
 interface Server {
   id: number;
@@ -10,7 +9,6 @@ interface Server {
   os: string;
   subnet: string;
   stock: number;
-
 }
 
 export default function Server() {
@@ -27,19 +25,19 @@ export default function Server() {
     };
     fetchService();
   }, []);
-  
+
   return (
-    <section>
-      <h2 className="font-bold bg-gray-300">Liste des serveurs</h2>
+    <section className="flex justify-center flex-col">
+      <div className="flex flex-row justify-between">
+        <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">Liste des serveurs</h2>
+        <button className="px-4 py-2 bg-black text-white border-0 rounded cursor-pointer">Ajouter un serveur</button>
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
         {servers.map((server) => (
           <li key={server.id}>
-            {server.name} -
-            {server.cpu} coeurs -
-            {server.ram} Go -
-            {server.subnet} -
-            {server.os} 
+            {server.name} -{server.cpu} coeurs -{server.ram} Go -{server.subnet}{" "}
+            -{server.os}
             {server.stock} Go
           </li>
         ))}
@@ -48,28 +46,3 @@ export default function Server() {
   );
 }
 
-// const token = useAppSelector((state) => state.auth.token);
-// useEffect(() => {
-//   if (!token) return;
-//   const fetchServers = async () => {
-//     try {
-//       const res = await fetch(
-//         `${import.meta.env.VITE_API_URL}admin/server/me`,
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//           credentials: "include",
-//         },
-//       );
-//       if (!res.ok) {
-//         const errData = await res.json();
-//         setError(errData.message);
-//         return;
-//       }
-//       const data = await res.json();
-//       setServers(data);
-//     } catch {
-//       setError("Erreur de chargement");
-//     }
-//   };
-//   fetchServers();
-// }, [token]);
