@@ -28,15 +28,16 @@ export default function Server() {
     const fetchServers = async () => {
       try {
         const res = await fetch(
-          "https://badger.arcplex.dev/api/v2/admin/server/me", {
-            headers: {Authorization : `Bearer ${token}`,
-          },
+          "https://badger.arcplex.dev/api/v2/admin/server/me",
+          {
+            headers: { Authorization: `Bearer ${token}` },
             credentials: "include",
-      });
+          },
+        );
         if (!res.ok) {
           const errData = await res.json();
           setError(errData.message);
-          return
+          return;
         }
         const data = await res.json();
         setServers(data);
@@ -48,11 +49,19 @@ export default function Server() {
   }, [token]);
   return (
     <section>
-      <h2>Hello World</h2>
+      <h2>Liste des serveurs</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
         {servers.map((server) => (
-          <li key={server.id}>{server.name}{server.cpu}{server.firewall}{server.hypervisor}</li>
+          <li key={server.id}>
+            {server.name}
+            {server.cpu}
+            {server.public_ip}
+            {server.subnet}
+            {server.ram}
+            {server.public_url}
+            {server.stock}
+          </li>
         ))}
       </ul>
     </section>
