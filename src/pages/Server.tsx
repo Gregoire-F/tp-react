@@ -30,7 +30,7 @@ export default function Server() {
   
   return (
     <section>
-      <h2>Liste des serveurs</h2>
+      <h2 className="font-bold bg-gray-300">Liste des serveurs</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
         {servers.map((server) => (
