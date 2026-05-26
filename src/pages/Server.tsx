@@ -6,18 +6,10 @@ interface Server {
   id: number;
   name: string;
   cpu: number;
-  public_ip: number;
-  subnet: string;
-  ssh_port: number;
-  hypervisor: string;
-  proxy_manager: string;
-  firewall: string;
-  stock: number;
   ram: number;
-  ssh_port_allocation: number;
-  port: number;
-  public_url: string;
-  private_ip: null;
+  os: string;
+  subnet: string;
+
 }
 
 export default function Server() {
@@ -26,7 +18,7 @@ export default function Server() {
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const data = await apiGet<Server[]>("admin/service/me");
+        const data = await apiGet<Server[]>("admin/server/me");
         setServers(data);
       } catch (err) {
         setError("Erreur de chargement");
@@ -42,13 +34,11 @@ export default function Server() {
       <ul>
         {servers.map((server) => (
           <li key={server.id}>
-            {server.name}
-            {server.cpu}
-            {server.public_ip}
-            {server.subnet}
-            {server.ram}
-            {server.public_url}
-            {server.stock}
+            {server.name} -
+            {server.cpu} coeurs -
+            {server.ram} Go -
+            {server.os} - 
+            {server.subnet} -
           </li>
         ))}
       </ul>
