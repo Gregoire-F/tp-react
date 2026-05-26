@@ -11,12 +11,12 @@ interface Vm {
 }
 
 export default function Vm() {
-  const [servers, setServers] = useState<Vm[]>([]);
+  const [vm, setVm] = useState<Vm[]>([]);
   const [error, setError] = useState("");
   const token = useAppSelector((state) => state.auth.token);
   useEffect(() => {
     if (!token) return;
-    const fetchServers = async () => {
+    const fetchVm = async () => {
       try {
         const res = await fetch(
           "https://badger.arcplex.dev/api/v2/admin/vm/me",
@@ -31,19 +31,19 @@ export default function Vm() {
           return;
         }
         const data = await res.json();
-        setServers(data);
+        setVm(data);
       } catch {
         setError("Erreur de chargement");
       }
     };
-    fetchServers();
+    fetchVm();
   }, [token]);
   return (
     <section>
       <h2>Liste des Vm</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
-        {servers.map((vm) => (
+        {vm.map((vm) => (
           <li key={vm.id}>
             {vm.name}
             {vm.cpu}

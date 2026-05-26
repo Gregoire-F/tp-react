@@ -26,7 +26,6 @@ export default function Login() {
       );
 
       const data = await res.json();
-      console.log("data")
       dispatch(setCredentials({ token: data.jwt, user: email }));
       navigate("/dashboard");
     } catch (err) {
