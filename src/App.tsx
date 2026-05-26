@@ -1,6 +1,7 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router";
 import "./App.css";
-import Login from "./routes/Login";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
     return (
@@ -19,6 +20,7 @@ export default function App() {
         </div>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter >
     );

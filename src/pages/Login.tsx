@@ -1,4 +1,4 @@
-import type { ChangeEvent, FormEvent } from "react";
+import type { FormEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "../store/store";
@@ -11,7 +11,7 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: ChangeEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -27,7 +27,7 @@ export default function Login() {
 
       const data = await res.json();
       dispatch(setCredentials({ token: data.token, user: email }));
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
     }
   };
