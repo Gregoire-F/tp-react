@@ -17,7 +17,7 @@ export default function User() {
     const fetchUsers = async () => {
       try {
         const res = await fetch(
-          "https://badger.arcplex.dev/api/v2/admin/user/me",
+          `${import.meta.env.VITE_API_URL}admin/user/me`,
           {
             headers: { Authorization: `Bearer ${token}` },
             credentials: "include",

@@ -17,7 +17,7 @@ export default function Login() {
 
     try {
       const res = await fetch(
-        "https://badger.arcplex.dev/api/v2/login",
+        `${import.meta.env.VITE_API_URL}login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

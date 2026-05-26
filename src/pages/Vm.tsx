@@ -19,7 +19,7 @@ export default function Vm() {
     const fetchVm = async () => {
       try {
         const res = await fetch(
-          "https://badger.arcplex.dev/api/v2/admin/vm/me",
+          `${import.meta.env.VITE_API_URL}admin/vm/me`,
           {
             headers: { Authorization: `Bearer ${token}` },
             credentials: "include",

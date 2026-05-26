@@ -6,8 +6,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  token: null,
-  user: null,
+  token: localStorage.getItem("token"),
+  user: localStorage.getItem("user"),
 
 };
 
