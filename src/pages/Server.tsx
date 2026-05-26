@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../store/store";
+import { apiGet } from "../lib/api";
+// import { useAppSelector } from "../store/store";
 
 interface Server {
   id: number;
@@ -22,31 +23,18 @@ interface Server {
 export default function Server() {
   const [servers, setServers] = useState<Server[]>([]);
   const [error, setError] = useState("");
-  const token = useAppSelector((state) => state.auth.token);
   useEffect(() => {
-    if (!token) return;
-    const fetchServers = async () => {
+    const fetchService = async () => {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}admin/server/me`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            credentials: "include",
-          },
-        );
-        if (!res.ok) {
-          const errData = await res.json();
-          setError(errData.message);
-          return;
-        }
-        const data = await res.json();
+        const data = await apiGet<Server[]>("admin/service/me");
         setServers(data);
-      } catch {
+      } catch (err) {
         setError("Erreur de chargement");
       }
     };
-    fetchServers();
-  }, [token]);
+    fetchService();
+  }, []);
+  
   return (
     <section>
       <h2>Liste des serveurs</h2>
@@ -67,3 +55,29 @@ export default function Server() {
     </section>
   );
 }
+
+// const token = useAppSelector((state) => state.auth.token);
+// useEffect(() => {
+//   if (!token) return;
+//   const fetchServers = async () => {
+//     try {
+//       const res = await fetch(
+//         `${import.meta.env.VITE_API_URL}admin/server/me`,
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//           credentials: "include",
+//         },
+//       );
+//       if (!res.ok) {
+//         const errData = await res.json();
+//         setError(errData.message);
+//         return;
+//       }
+//       const data = await res.json();
+//       setServers(data);
+//     } catch {
+//       setError("Erreur de chargement");
+//     }
+//   };
+//   fetchServers();
+// }, [token]);
