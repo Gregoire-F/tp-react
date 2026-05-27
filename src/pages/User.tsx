@@ -6,10 +6,13 @@ interface User {
   email: string;
   name: string;
   firstname: string;
+  roles: string;
+  active: boolean;
 }
 
 export default function User() {
   const { data: user, error, execute } = useApiCall<User[]>();
+  
   useEffect(() => {
     execute("GET", "admin/user/me");
   }, [execute]);

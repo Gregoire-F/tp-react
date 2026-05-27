@@ -98,7 +98,7 @@ export default function Server() {
     { key: "subnet", label: "Sous-réseau" },
     { key: "stock", label: "Stock (Go)", type: "number" },
     { key: "hypervisor", label: "Hyperviseur" },
-    { key: "public_ip", label: "IP Publique" },
+    { key: "public_ip", label: "IP Publique ex 185.66.234.58" },
     { key: "ssh_port", label: "Port SSH" },
   ];
 

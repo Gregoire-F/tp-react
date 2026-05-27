@@ -20,7 +20,7 @@ async function apiFetch<T>(
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  const data = await res.json();
+  const data = res.status === 204 ? null : await res.json();
   if (!res.ok) {
     throw new Error(data.message ?? "Erreur serveur");
   }
