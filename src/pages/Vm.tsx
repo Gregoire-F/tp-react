@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useAppSelector } from "../store/store";
+import { useEffect } from "react";
+import { useApiCall } from "../lib/api";
 
 interface Vm {
   id: number;
@@ -11,39 +11,16 @@ interface Vm {
 }
 
 export default function Vm() {
-  const [vm, setVm] = useState<Vm[]>([]);
-  const [error, setError] = useState("");
-  const token = useAppSelector((state) => state.auth.token);
+  const { data: vm, error, execute } = useApiCall<Vm[]>();
   useEffect(() => {
-    if (!token) return;
-    const fetchVm = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}admin/vm/me`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            credentials: "include",
-          },
-        );
-        if (!res.ok) {
-          const errData = await res.json();
-          setError(errData.message);
-          return;
-        }
-        const data = await res.json();
-        setVm(data);
-      } catch {
-        setError("Erreur de chargement");
-      }
-    };
-    fetchVm();
-  }, [token]);
+    execute("GET", "admin/vm/me");
+  }, [execute]);
   return (
     <section>
       <h2>Liste des Vm</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
-        {vm.map((vm) => (
+        {(vm ?? []).map((vm) => (
           <li key={vm.id}>
             {vm.name}
             {vm.cpu}

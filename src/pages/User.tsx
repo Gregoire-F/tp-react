@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useAppSelector } from "../store/store";
+import { useEffect } from "react";
+import { useApiCall } from "../lib/api";
 
 interface User {
   id: number;
@@ -9,39 +9,16 @@ interface User {
 }
 
 export default function User() {
-  const [user, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState("");
-  const token = useAppSelector((state) => state.auth.token);
+  const { data: user, error, execute } = useApiCall<User[]>();
   useEffect(() => {
-    if (!token) return;
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}admin/user/me`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            credentials: "include",
-          },
-        );
-        if (!res.ok) {
-          const errData = await res.json();
-          setError(errData.message);
-          return;
-        }
-        const data = await res.json();
-        setUsers(data);
-      } catch {
-        setError("Erreur de chargement");
-      }
-    };
-    fetchUsers();
-  }, [token]);
+    execute("GET", "admin/user/me");
+  }, [execute]);
   return (
     <section>
       <h2>Liste des users</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
-        {user.map((user) => (
+        {(user ?? []).map((user) => (
           <li key={user.id}>
             {user.name}
           </li>

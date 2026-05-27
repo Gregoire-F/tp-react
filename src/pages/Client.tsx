@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useAppSelector } from "../store/store";
+import { useEffect } from "react";
+import { useApiCall } from "../lib/api";
 
 interface Client {
   id: number;
@@ -7,39 +7,16 @@ interface Client {
 }
 
 export default function Client() {
-  const [client, setClients] = useState<Client[]>([]);
-  const [error, setError] = useState("");
-  const token = useAppSelector((state) => state.auth.token);
+  const { data: client, error, execute } = useApiCall<Client[]>();
   useEffect(() => {
-    if (!token) return;
-    const fetchClient = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}admin/client/me`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            credentials: "include",
-          },
-        );
-        if (!res.ok) {
-          const errData = await res.json();
-          setError(errData.message);
-          return;
-        }
-        const data = await res.json();
-        setClients(data);
-      } catch {
-        setError("Erreur de chargement");
-      }
-    };
-    fetchClient();
-  }, [token]);
+    execute("GET", "admin/client/me");
+  }, [execute]);
   return (
     <section>
       <h2>Liste des clients</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
-        {client.map((client) => (
+        {(client ?? []).map((client) => (
           <li key={client.id}>
             {client.name}
           </li>
