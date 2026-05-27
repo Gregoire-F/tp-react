@@ -25,47 +25,72 @@ interface ServerForm {
 }
 
 const initialForm: ServerForm = {
-  name: "", cpu: "", ram: "", subnet: "", stock: "", 
-  hypervisor: "", public_ip: "", ssh_port: ""
+  name: "",
+  cpu: "",
+  ram: "",
+  subnet: "",
+  stock: "",
+  hypervisor: "",
+  public_ip: "",
+  ssh_port: "",
 };
 
 export default function Server() {
   const { data: servers, error, execute } = useApiCall<Server[]>();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<ServerForm>(initialForm);
+  const [editingServer, setEditingServer] = useState<Server | null>(null);
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
     execute("GET", "admin/server/me");
   }, [execute]);
 
-  const handleChange = (field: keyof ServerForm) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setForm(prev => ({ ...prev, [field]: e.target.value }));
+  const handleChange =
+    (field: keyof ServerForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setForm((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setFormError("");
+    const body = {
+      name: form.name,
+      cpu: Number(form.cpu),
+      ram: Number(form.ram),
+      subnet: form.subnet,
+      stock: Number(form.stock),
+      hypervisor: form.hypervisor,
+      public_ip: form.public_ip,
+      ssh_port: form.ssh_port,
+    };
     try {
-      await execute("POST", "admin/server", {
-        name: form.name,
-        cpu: Number(form.cpu),
-        ram: Number(form.ram),
-        subnet: form.subnet,
-        stock: Number(form.stock),
-        hypervisor: form.hypervisor,
-        public_ip: form.public_ip,
-        ssh_port: form.ssh_port,
-      });
+      if (editingServer) {
+        await execute("PATCH", `admin/server/${editingServer.id}`, body);
+      } else {
+        await execute("POST", "admin/server", body);
+      }
       setShowModal(false);
+      setEditingServer(null);
       setForm(initialForm);
       await execute("GET", "admin/server/me");
     } catch {
-      setFormError("Erreur lors de l'ajout du serveur");
+      setFormError(
+        editingServer
+          ? "Erreur lors de la modification du serveur"
+          : "Erreur lors de l'ajout du serveur",
+      );
     }
   };
-
+  const handleDelete = async (id: number) => {
+  if (!confirm("Supprimer ce serveur ?")) return;
+  try {
+    await execute("DELETE", `admin/server/${id}`);
+    await execute("GET", "admin/server/me");
+  } catch {
+    setFormError("Erreur lors de la suppression");
+  }
+};
   const fields: { key: keyof ServerForm; label: string; type?: string }[] = [
     { key: "name", label: "Nom" },
     { key: "cpu", label: "CPU (coeurs)", type: "number" },
@@ -95,8 +120,26 @@ export default function Server() {
         {(servers ?? []).map((server) => (
           <li key={server.id}>
             {server.name} -{server.cpu} coeurs -{server.ram} Go -{server.subnet}
-            {server.stock} Go -
-            {server.hypervisor} - {server.public_ip} - {server.ssh_port} 
+            {server.stock} Go -{server.hypervisor} - {server.public_ip} -
+            {server.ssh_port}
+            <button
+              onClick={() => {
+                setEditingServer(server);
+                setForm({
+                  ...server,
+                  cpu: String(server.cpu),
+                  ram: String(server.ram),
+                  stock: String(server.stock),
+                });
+                setShowModal(true);
+              }}
+              className="px-4 py-2 m-2 bg-gray-700 text-white border-0 rounded cursor-pointer"
+            >
+              Edit
+            </button>
+            <button onClick={() => handleDelete(server.id)}className="px-4 py-2 bg-red-500 text-white border-0 rounded cursor-pointer">
+              Supprimer 
+            </button>
           </li>
         ))}
       </ul>
@@ -106,10 +149,8 @@ export default function Server() {
             onSubmit={handleSubmit}
             className="bg-white p-6 rounded-lg min-w-80 flex flex-col gap-3"
           >
-            <h3>Ajouter un serveur</h3>
-            {formError && (
-              <p className="margin-0 text-red-500">{formError}</p>
-            )}
+            <h3>{editingServer ? "Modifier le serveur" : "Ajouter un serveur"}</h3>
+            {formError && <p className="margin-0 text-red-500">{formError}</p>}
             {fields.map(({ key, label, type }) => (
               <input
                 key={key}
@@ -125,12 +166,16 @@ export default function Server() {
                 type="submit"
                 className="px-4 py-2 bg-black text-white border-0 rounded cursor-pointer"
               >
-                Ajouter
+                {editingServer ? "Enregistrer" : "Ajouter"}
               </button>
               <button
                 type="button"
                 className="px-4 py-2 bg-gray-300 border-0 rounded cursor-pointer"
-                onClick={() => setShowModal(false)}
+                onClick={() => {
+                  setShowModal(false);
+                  setEditingServer(null);
+                  setForm(initialForm);
+                }}
               >
                 Annuler
               </button>
