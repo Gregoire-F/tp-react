@@ -7,22 +7,26 @@ interface Server {
   name: string;
   cpu: number;
   ram: number;
-  os: string;
   subnet: string;
   stock: number;
+  hypervisor: string;
+  public_ip: string;
+  ssh_port: string;
 }
-
 interface ServerForm {
   name: string;
   cpu: string;
   ram: string;
-  os: string;
   subnet: string;
   stock: string;
+  hypervisor: string;
+  public_ip: string;
+  ssh_port: string;
 }
 
 const initialForm: ServerForm = {
-  name: "", cpu: "", ram: "", os: "", subnet: "", stock: "",
+  name: "", cpu: "", ram: "", subnet: "", stock: "", 
+  hypervisor: "", public_ip: "", ssh_port: ""
 };
 
 export default function Server() {
@@ -46,11 +50,13 @@ export default function Server() {
     try {
       await execute("POST", "admin/server", {
         name: form.name,
-        cpu: String(form.cpu),
-        ram: String(form.ram),
-        os: form.os,
+        cpu: Number(form.cpu),
+        ram: Number(form.ram),
         subnet: form.subnet,
         stock: Number(form.stock),
+        hypervisor: form.hypervisor,
+        public_ip: form.public_ip,
+        ssh_port: form.ssh_port,
       });
       setShowModal(false);
       setForm(initialForm);
@@ -64,9 +70,11 @@ export default function Server() {
     { key: "name", label: "Nom" },
     { key: "cpu", label: "CPU (coeurs)", type: "number" },
     { key: "ram", label: "RAM (Go)", type: "number" },
-    { key: "os", label: "OS" },
     { key: "subnet", label: "Sous-réseau" },
     { key: "stock", label: "Stock (Go)", type: "number" },
+    { key: "hypervisor", label: "Hyperviseur" },
+    { key: "public_ip", label: "IP Publique" },
+    { key: "ssh_port", label: "Port SSH" },
   ];
 
   return (
@@ -86,9 +94,9 @@ export default function Server() {
       <ul>
         {(servers ?? []).map((server) => (
           <li key={server.id}>
-            {server.name} -{server.cpu} coeurs -{server.ram} Go -{server.subnet}{" "}
-            -{server.os}
-            {server.stock} Go
+            {server.name} -{server.cpu} coeurs -{server.ram} Go -{server.subnet}
+            {server.stock} Go -
+            {server.hypervisor} - {server.public_ip} - {server.ssh_port} 
           </li>
         ))}
       </ul>
