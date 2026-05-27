@@ -21,6 +21,9 @@ const authSlice = createSlice({
     ) {
       state.token = action.payload.token;
       state.user = action.payload.user;
+      // Ajout ici pour gestion du localStorage avec Redux et hook useAppSelector dans les pages
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("user", action.payload.user);
     },
     logout(state) {
       state.token = null;
