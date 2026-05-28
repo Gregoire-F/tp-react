@@ -1,5 +1,9 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAppDispatch } from "../store/store";
+import { logout } from "../store/authSlice";
 export default function Dashboard() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   return (
     <section>
       <h2>Bienvenue sur le dashboard</h2>
@@ -8,7 +12,15 @@ export default function Dashboard() {
       <Link to="/user">Liste des users</Link>
       <Link to="/client">Liste des clients</Link>
       <Link to="/service">Liste des services</Link>
-      <button className="bg-red-500 py-2 px-4 rounded hover:bg-red-600 cursor-pointer text-white">Se déconnecter</button>
+      <button
+        onClick={() => {
+          dispatch(logout());
+          navigate("/login");
+        }}
+        className="bg-red-500 py-2 px-4 rounded hover:bg-red-600 cursor-pointer text-white"
+      >
+        Se déconnecter
+      </button>
     </section>
   );
 }

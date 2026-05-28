@@ -7,20 +7,23 @@ import Vm from "./pages/Vm";
 import User from "./pages/User";
 import Client from "./pages/Client";
 import Service from "./pages/Service";
+import NeedAuth from "./components/NeedAuth";
 
 export default function App() {
-    return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route element={<NeedAuth />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/server" element={<Server />} />
           <Route path="/vm" element={<Vm />} />
           <Route path="/user" element={<User />} />
           <Route path="/client" element={<Client />} />
           <Route path="/service" element={<Service />} />
-        </Routes>
-      </BrowserRouter >
-    );
-  }
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
