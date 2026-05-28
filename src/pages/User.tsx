@@ -169,7 +169,7 @@ export default function User() {
           >
             <option value="">Sélectionner un rôle</option>
             <option value="ROLE_SUPER_ADMIN">ROLE_SUPER_ADMIN</option>
-            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+            <option value="ROLE_ADMIN">ROLE_CLIENT_ADMIN</option>
             <option value="ROLE_DEVELOPER">ROLE_DEVELOPER</option>
             <option value="ROLE_USER">ROLE_USER</option>
           </select>
