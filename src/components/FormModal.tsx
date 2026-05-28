@@ -8,7 +8,7 @@ interface ModalProps {
   children: ReactNode;
 }
 
-export default function ServeurFormModal({
+export default function FormModal({
   title,
   formError,
   onSubmit,

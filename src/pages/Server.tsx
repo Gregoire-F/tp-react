@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useApiCall } from "../lib/api";
-import ServeurFormModal from "../components/ServeurFormModal";
+import FormModal from "../components/FormModal";
 
 interface Server {
   id: number;
@@ -134,7 +134,7 @@ export default function Server() {
         ))}
       </ul>
       {showModal && (
-        <ServeurFormModal
+        <FormModal
           title={editingServer ? "Modifier le serveur" : "Ajouter un serveur"}
           formError={formError}
           onSubmit={handleSubmit}
@@ -200,7 +200,7 @@ export default function Server() {
             onChange={handleChange("ssh_port")}
             required
           />
-        </ServeurFormModal>
+        </FormModal>
       )}
     </section>
   );
