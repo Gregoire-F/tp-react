@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useApiCall } from "../lib/api";
+import ServeurFormModal from "../components/ServeurFormModal";
 
 interface Server {
   id: number;
@@ -91,17 +92,6 @@ export default function Server() {
     setFormError("Erreur lors de la suppression");
   }
 };
-  const fields: { key: keyof ServerForm; label: string; type?: string }[] = [
-    { key: "name", label: "Nom" },
-    { key: "cpu", label: "CPU (coeurs)", type: "number" },
-    { key: "ram", label: "RAM (Go)", type: "number" },
-    { key: "subnet", label: "Sous-réseau" },
-    { key: "stock", label: "Stock (Go)", type: "number" },
-    { key: "hypervisor", label: "Hyperviseur" },
-    { key: "public_ip", label: "IP Publique ex 185.66.234.58" },
-    { key: "ssh_port", label: "Port SSH" },
-  ];
-
   return (
     <section className="flex justify-center flex-col">
       <div className="flex flex-row justify-between">
@@ -144,44 +134,73 @@ export default function Server() {
         ))}
       </ul>
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-lg min-w-80 flex flex-col gap-3"
-          >
-            <h3>{editingServer ? "Modifier le serveur" : "Ajouter un serveur"}</h3>
-            {formError && <p className="margin-0 text-red-500">{formError}</p>}
-            {fields.map(({ key, label, type }) => (
-              <input
-                key={key}
-                type={type ?? "text"}
-                value={form[key]}
-                onChange={handleChange(key)}
-                placeholder={label}
-                required
-              />
-            ))}
-            <div className="flex gap-2 justify-end">
-              <button
-                type="submit"
-                className="px-4 py-2 bg-black text-white border-0 rounded cursor-pointer"
-              >
-                {editingServer ? "Enregistrer" : "Ajouter"}
-              </button>
-              <button
-                type="button"
-                className="px-4 py-2 bg-gray-300 border-0 rounded cursor-pointer"
-                onClick={() => {
-                  setShowModal(false);
-                  setEditingServer(null);
-                  setForm(initialForm);
-                }}
-              >
-                Annuler
-              </button>
-            </div>
-          </form>
-        </div>
+        <ServeurFormModal
+          title={editingServer ? "Modifier le serveur" : "Ajouter un serveur"}
+          formError={formError}
+          onSubmit={handleSubmit}
+          onCancel={() => {
+            setShowModal(false);
+            setEditingServer(null);
+            setForm(initialForm);
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Nom"
+            value={form.name}
+            onChange={handleChange("name")}
+            required
+          />
+          <input
+            type="number"
+            placeholder="CPU (coeurs)"
+            value={form.cpu}
+            onChange={handleChange("cpu")}
+            required
+          />
+          <input
+            type="number"
+            placeholder="RAM (Go)"
+            value={form.ram}
+            onChange={handleChange("ram")}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Sous-réseau"
+            value={form.subnet}
+            onChange={handleChange("subnet")}
+            required
+          />
+          <input
+            type="number"
+            placeholder="Stock (Go)"
+            value={form.stock}
+            onChange={handleChange("stock")}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Hyperviseur"
+            value={form.hypervisor}
+            onChange={handleChange("hypervisor")}
+            required
+          />
+          <input
+            type="text"
+            placeholder="IP Publique ex 185.66.234.58"
+            value={form.public_ip}
+            onChange={handleChange("public_ip")}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Port SSH"
+            value={form.ssh_port}
+            onChange={handleChange("ssh_port")}
+            required
+          />
+        </ServeurFormModal>
       )}
     </section>
   );
