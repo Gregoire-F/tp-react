@@ -155,6 +155,12 @@ export default function User() {
             value={form.ip_address}
             onChange={handleChange("ip_address")}
           />
+          <input
+            type="string"
+            placeholder="password"
+            value={form.plain_password}
+            onChange={handleChange("plain_password")}
+          />
           <select
             value={form.roles}
             onChange={handleChange("roles")}
