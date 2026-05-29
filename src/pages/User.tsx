@@ -10,18 +10,20 @@ interface User {
   email: string;
   name: string;
   firstname: string;
-  ip_address: string;
+  ip_address?: string;
   roles: string;
   team: { id: number; name: string };
+  ssh_user: string;
 }
 interface UserForm {
   email: string;
   name: string;
   firstname: string;
   roles: string;
-  ip_address: string;
+  ip_address?: string;
   plain_password?: string;
   team?: string;
+  ssh_user: string;
 }
 
 const initialForm: UserForm = {
@@ -29,8 +31,9 @@ const initialForm: UserForm = {
   email: "",
   firstname: "",
   roles: "",
-  ip_address: "",
+  // ip_address: "",
   team: "",
+  ssh_user: "",
 };
 export default function User() {
   const canDelete = useCanDelete("user");
@@ -114,7 +117,10 @@ export default function User() {
                   onClick={() => {
                     setEditingUser(user);
                     setForm({
-                      ...user,
+                      email:(user.email),
+                      name: (user.name),
+                      ssh_user:(user.ssh_user),
+                      firstname: (user.firstname),
                       roles: Array.isArray(user.roles)
                         ? (user.roles[0] ?? "")
                         : user.roles,
@@ -170,17 +176,23 @@ export default function User() {
             onChange={handleChange("email")}
             required
           />
-          <input
+          {/* <input
             type="string"
             placeholder="ip_adress"
             value={form.ip_address}
             onChange={handleChange("ip_address")}
-          />
+          /> */}
           <input
             type="string"
             placeholder="password"
             value={form.plain_password}
             onChange={handleChange("plain_password")}
+          />
+          <input
+            type="string"
+            placeholder="ssh_user"
+            value={form.ssh_user}
+            onChange={handleChange("ssh_user")}
           />
           <select
             value={form.roles}
