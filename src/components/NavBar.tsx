@@ -6,10 +6,11 @@ export default function NavBar() {
   const navigate = useNavigate();
   return (
     <header>
-      <nav className="border-slate-200 h-30">
+      <nav className="border-slate-200 h-30 mt-4">
         <h2 className="text-center text-2xl mb-6">Interface Badger</h2>
         <div className="text-l flex justify-center flex-wrap items-center mx-auto max-w-7-xl px-6">
           <div className="flex gap-6">
+            <Link to="/dashboard/">Accueil</Link>
             <Link to="/server/me">Liste des serveurs</Link>
             <Link to="/vm/me">Liste des Vm</Link>
             <Link to="/user/me">Liste des users</Link>
