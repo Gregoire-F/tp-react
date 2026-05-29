@@ -17,11 +17,11 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route element={<NeedAuth />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/server" element={<Server />} />
-          <Route path="/vm" element={<Vm />} />
-          <Route path="/user" element={<User />} />
-          <Route path="/client" element={<Client />} />
-          <Route path="/service" element={<Service />} />
+          <Route path="/server/me" element={<Server />} />
+          <Route path="/vm/me" element={<Vm />} />
+          <Route path="/user/me" element={<User />} />
+          <Route path="/client/me" element={<Client />} />
+          <Route path="/service/me" element={<Service />} />
         </Route>
       </Routes>
     </BrowserRouter>

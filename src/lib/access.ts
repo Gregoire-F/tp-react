@@ -26,7 +26,6 @@ export function useCanEdit (entityType:string){
         // Le SUPER_ADMIN peut tout éditer
         if (role === "ROLE_SUPER_ADMIN") return true
 
-
         // Serveurs et Vm : seul SUPER_ADMIN a le droit d'éditer
         if (entityType === "server" || entityType === "vm"){
             return role === "ROLE_SUPER_ADMIN"
@@ -45,6 +44,5 @@ export function useCanEdit (entityType:string){
             if (entityType === "server" || entityType === "vm") return true;
             return false;
         }
-        return false
     }
 }
