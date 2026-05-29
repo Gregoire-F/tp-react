@@ -11,7 +11,7 @@ interface User {
   name: string;
   firstname: string;
   ip_address?: string;
-  roles: string;
+  roles: string[];
   team: { id: number; name: string };
   ssh_user: string;
 }
@@ -19,7 +19,7 @@ interface UserForm {
   email: string;
   name: string;
   firstname: string;
-  roles: string;
+  role: string;
   ip_address?: string;
   plain_password?: string;
   team?: string;
@@ -30,7 +30,7 @@ const initialForm: UserForm = {
   name: "",
   email: "",
   firstname: "",
-  roles: "",
+  role: "ROLE_USER",
   ip_address: "",
   team: "",
   ssh_user: "",
@@ -60,13 +60,11 @@ export default function User() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setFormError("");
-    const body: any = { ...form, roles: form.roles ? [form.roles] : [] };
-    if (form.team) body.team = form.team;
     try {
       if (editingUser) {
-        await execute("PATCH", `admin/user/${editingUser.id}`, body);
+        await execute("PATCH", `admin/user/${editingUser.id}`, form);
       } else {
-        await execute("POST", "admin/user", body);
+        await execute("POST", "admin/user", form);
       }
       setShowModal(false);
       setEditingUser(null);
@@ -105,10 +103,10 @@ export default function User() {
         )}
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <ul>
+      <ul className="flex flex-col text-end mx-auto border p-5 border-gray-200 items-end ">
         {Array.isArray(user) &&
           user.map((user) => (
-            <li key={user.id}>
+            <li key={user.id} className="flex gap-3 p-2 border-b-2 border-gray-200">
               {user.name} -{user.firstname} -{user.email}
               {Array.isArray(user.roles) ? user.roles[0] : user.roles}
               {canEdit(null) && (
@@ -121,7 +119,7 @@ export default function User() {
                       ssh_user: user.ssh_user,
                       ip_address: user.ip_address,
                       firstname: user.firstname,
-                      roles: Array.isArray(user.roles)
+                      role: Array.isArray(user.roles)
                         ? (user.roles[0] ?? "")
                         : user.roles,
                       team: user.team ? String(user.team.id) : "",
@@ -195,8 +193,8 @@ export default function User() {
             onChange={handleChange("ssh_user")}
           />
           <select
-            value={form.roles}
-            onChange={handleChange("roles")}
+            value={form.role}
+            onChange={handleChange("role")}
             required
             className="border p-2 rounded"
           >
