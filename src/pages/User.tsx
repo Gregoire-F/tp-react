@@ -31,7 +31,7 @@ const initialForm: UserForm = {
   email: "",
   firstname: "",
   roles: "",
-  // ip_address: "",
+  ip_address: "",
   team: "",
   ssh_user: "",
 };
@@ -109,7 +109,7 @@ export default function User() {
         {Array.isArray(user) &&
           user.map((user) => (
             <li key={user.id}>
-              {user.name} -{user.firstname} -{user.email} -{" "}
+              {user.name} -{user.firstname} -{user.email}
               {Array.isArray(user.roles) ? user.roles[0] : user.roles}
               {canEdit(null) && (
                 <button
@@ -119,6 +119,7 @@ export default function User() {
                       email: user.email,
                       name: user.name,
                       ssh_user: user.ssh_user,
+                      ip_address: user.ip_address,
                       firstname: user.firstname,
                       roles: Array.isArray(user.roles)
                         ? (user.roles[0] ?? "")
@@ -175,12 +176,12 @@ export default function User() {
             onChange={handleChange("email")}
             required
           />
-          {/* <input
+          <input
             type="string"
             placeholder="ip_adress"
             value={form.ip_address}
             onChange={handleChange("ip_address")}
-          /> */}
+          />
           <input
             type="string"
             placeholder="password"
