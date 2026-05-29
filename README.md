@@ -6,7 +6,7 @@ Version de TailwindCSS : 4.3.0
 Voici ce que j'ai pas eu le temps de faire :
 
 
-UI plus travaillée
+Mieux travailler les pages client et services
 
 
-Faire toutes les pages de l'API (client, services)
+Barre de recherche dans les pages

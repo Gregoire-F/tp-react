@@ -15,11 +15,11 @@ export default function Client() {
   return (
     <section>
       <NavBar />
-      <h2>Liste des clients</h2>
+      <h2 className="font-bold text-xl text-center bg-gray-200 px-4 py-2">Liste des clients</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <ul>
+      <ul className="flex flex-col text-center mx-auto border p-5 border-gray-200">
         {(client ?? []).map((client) => (
-          <li key={client.id}>
+          <li key={client.id} className="flex gap-3 p-2 border-b-2 border-gray-200">
             {client.name}
           </li>
         ))}

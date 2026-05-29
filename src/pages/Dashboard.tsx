@@ -38,7 +38,7 @@ export default function Dashboard() {
         <NavBar />
       </header>
 
-      <article className="mx-auto max-7-w-xl py-8 px-6 rounded border border-slate-300 border-t-4 border-t-black">
+      <article className="mx-auto max-7-w-xl py-8 px-6 rounded border border-slate-300 border-t-2 border-t-gray-300">
         <div className="p-4 border-b-4 border-amber-500"><h2 className="text-xl font-semibold">🏠 Accueil</h2></div>
         <div className="relative w-full overflow-auto">
           <table className="w-full">
