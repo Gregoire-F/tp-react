@@ -118,7 +118,7 @@ export default function Vm() {
         <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">
           Liste des VM
         </h2>
-        {canEdit(vm) && (
+        {canEdit(null) && (
           <button
             className="px-4 py-2 bg-black text-white border-0 rounded cursor-pointer"
             onClick={() => setShowModal(true)}
