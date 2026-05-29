@@ -13,7 +13,6 @@ export default function Login() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError("Erreur dans les identifiants !");
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}login`, {
@@ -22,10 +21,15 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
 
+      if(!res.ok){
+        setError("Erreur dans les identifiants !");
+        return
+      }
+
       const data = await res.json();
       dispatch(setCredentials({ token: data.jwt, user: email }));
       navigate("/dashboard");
-    } catch (err) {}
+    } catch (err) {"Erreur dans les identifiants !"}
   };
 
   return (
