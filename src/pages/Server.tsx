@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useApiCall } from "../lib/api";
 import FormModal from "../components/FormModal";
-import { useCanDelete } from "../lib/access";
+import { useCanDelete, useCanEdit } from "../lib/access";
 
 interface Server {
   id: number;
@@ -38,7 +38,8 @@ const initialForm: ServerForm = {
 };
 
 export default function Server() {
-  const canDelete = useCanDelete("server")
+  const canDelete = useCanDelete("server");
+  const canEdit = useCanEdit("server");
 
   const { data: servers, error, execute } = useApiCall<Server[]>();
   const [showModal, setShowModal] = useState(false);
@@ -87,26 +88,28 @@ export default function Server() {
     }
   };
   const handleDelete = async (id: number) => {
-  if (!confirm("Supprimer ce serveur ?")) return;
-  try {
-    await execute("DELETE", `admin/server/${id}`);
-    await execute("GET", "admin/server/me");
-  } catch {
-    setFormError("Erreur lors de la suppression");
-  }
-};
+    if (!confirm("Supprimer ce serveur ?")) return;
+    try {
+      await execute("DELETE", `admin/server/${id}`);
+      await execute("GET", "admin/server/me");
+    } catch {
+      setFormError("Erreur lors de la suppression");
+    }
+  };
   return (
     <section className="flex justify-center flex-col">
       <div className="flex flex-row justify-between">
         <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">
           Liste des serveurs
         </h2>
-        <button
-          className="px-4 py-2 bg-black text-white border-0 rounded cursor-pointer"
-          onClick={() => setShowModal(true)}
-        >
-          Ajouter un serveur
-        </button>
+        {canEdit(null) && (
+          <button
+            className="px-4 py-2 bg-black text-white border-0 rounded cursor-pointer"
+            onClick={() => setShowModal(true)}
+          >
+            Ajouter un serveur
+          </button>
+        )}
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
@@ -115,24 +118,36 @@ export default function Server() {
             {server.name} -{server.cpu} coeurs -{server.ram} Go -{server.subnet}
             {server.stock} Go -{server.hypervisor} - {server.public_ip} -
             {server.ssh_port}
-            <button
-              onClick={() => {
-                setEditingServer(server);
-                setForm({
-                  ...server,
-                  cpu: String(server.cpu),
-                  ram: String(server.ram),
-                  stock: String(server.stock),
-                });
-                setShowModal(true);
-              }}
-              className="px-4 py-2 m-2 bg-gray-700 text-white border-0 rounded cursor-pointer"
-            >
-              Edit
-            </button>
-            <button onClick={() => handleDelete(server.id)}className="px-4 py-2 bg-red-500 text-white border-0 rounded cursor-pointer">
-              Supprimer 
-            </button>
+            {canEdit(server) && (
+              <button
+                onClick={() => {
+                  setEditingServer(server);
+                  setForm({
+                    ...server,
+                    cpu: String(server.cpu),
+                    ram: String(server.ram),
+                    stock: String(server.stock),
+                  });
+                  setShowModal(true);
+                }}
+                className="px-4 py-2 m-2 bg-gray-700 text-white border-0 rounded cursor-pointer"
+              >
+                Edit
+              </button>
+            )}
+            {canDelete(server) && (
+              <button onClick={() => handleDelete(server.id)} className="px-4 py-2 bg-red-500 text-white border-0 rounded cursor-pointer">
+                Supprimer
+              </button>
+            )}
+            {canDelete(server) && (
+              <button
+                onClick={() => handleDelete(server.id)}
+                className="px-4 py-2 bg-red-500 text-white border-0 rounded cursor-pointer"
+              >
+                Supprimer
+              </button>
+            )}
           </li>
         ))}
       </ul>

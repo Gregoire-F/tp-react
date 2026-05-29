@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useApiCall } from "../lib/api";
 import FormModal from "../components/FormModal";
+import { useCanDelete, useCanEdit } from "../lib/access";
+import { useAppSelector } from "../store/store";
 
 interface User {
   id: number;
@@ -10,6 +12,7 @@ interface User {
   firstname: string;
   ip_address: string;
   roles: string;
+  team: { id: number; name: string };
 }
 interface UserForm {
   email: string;
@@ -18,7 +21,7 @@ interface UserForm {
   roles: string;
   ip_address: string;
   plain_password?: string;
-  // team?:string; the selected choice is invalid dans le form creation ou edit user bug
+  team?: string;
 }
 
 const initialForm: UserForm = {
@@ -27,8 +30,14 @@ const initialForm: UserForm = {
   firstname: "",
   roles: "",
   ip_address: "",
+  team: "",
 };
 export default function User() {
+  const canDelete = useCanDelete("user");
+  const canEdit = useCanEdit("user");
+  const { user: authUser } = useAppSelector((store) => store.auth);
+  const role = authUser?.user.roles[0];
+
   const { data: user, error, execute } = useApiCall<User[]>();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<UserForm>(initialForm);
@@ -40,17 +49,17 @@ export default function User() {
   }, [execute]);
 
   const handleChange =
-    (field: keyof UserForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    (field: keyof UserForm) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       setForm((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
   const handleSubmit = async (e: FormEvent) => {
+    
     e.preventDefault();
     setFormError("");
-    const body = { ... form,
-      roles: form.roles ? [form.roles] : [],
-
-    };
+    const body: any = { ...form, roles: form.roles ? [form.roles] : [] };
+    if (form.team) body.team = form.team;
     try {
       if (editingUser) {
         await execute("PATCH", `admin/user/${editingUser.id}`, body);
@@ -84,39 +93,50 @@ export default function User() {
         <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">
           Liste des users
         </h2>
-        <button
-          className="px-4 py-2 bg-black text-white border-0 rounded cursor-pointer"
-          onClick={() => setShowModal(true)}
-        >
-          Ajouter un user
-        </button>
+        {canEdit(null) && (
+          <button
+            className="px-4 py-2 bg-black text-white border-0 rounded cursor-pointer"
+            onClick={() => setShowModal(true)}
+          >
+            Ajouter un user
+          </button>
+        )}
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
-        {Array.isArray(user) && user.map((user) => (
-          <li key={user.id}>
-            {user.name} -{user.firstname} -{user.email} - {Array.isArray(user.roles) ? user.roles[0] : user.roles}
-            <button
-              onClick={() => {
-                setEditingUser(user);
-                setForm({
-                  ...user,
-                  roles: Array.isArray(user.roles) ? user.roles[0] ?? "" : user.roles,
-                });
-                setShowModal(true);
-              }}
-              className="px-4 py-2 m-2 bg-gray-700 text-white border-0 rounded cursor-pointer"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => handleDelete(user.id)}
-              className="px-4 py-2 bg-red-500 text-white border-0 rounded cursor-pointer"
-            >
-              Supprimer
-            </button>
-          </li>
-        ))}
+        {Array.isArray(user) &&
+          user.map((user) => (
+            <li key={user.id}>
+              {user.name} -{user.firstname} -{user.email} -{" "}
+              {Array.isArray(user.roles) ? user.roles[0] : user.roles}
+              {canEdit(null) && (
+                <button
+                  onClick={() => {
+                    setEditingUser(user);
+                    setForm({
+                      ...user,
+                      roles: Array.isArray(user.roles)
+                        ? (user.roles[0] ?? "")
+                        : user.roles,
+                      team: user.team ? String(user.team.id) : "",
+                    });
+                    setShowModal(true);
+                  }}
+                  className="px-4 py-2 m-2 bg-gray-700 text-white border-0 rounded cursor-pointer"
+                >
+                  Edit
+                </button>
+              )}
+              {canDelete(user) && (
+                <button
+                  onClick={() => handleDelete(user.id)}
+                  className="px-4 py-2 bg-red-500 text-white border-0 rounded cursor-pointer"
+                >
+                  Supprimer
+                </button>
+              )}
+            </li>
+          ))}
       </ul>
       {showModal && (
         <FormModal
@@ -170,19 +190,21 @@ export default function User() {
           >
             <option value="">Sélectionner un rôle</option>
             <option value="ROLE_SUPER_ADMIN">ROLE_SUPER_ADMIN</option>
-            <option value="ROLE_ADMIN">ROLE_CLIENT_ADMIN</option>
+            <option value="ROLE_CLIENT_ADMIN">ROLE_CLIENT_ADMIN</option>
             <option value="ROLE_DEVELOPER">ROLE_DEVELOPER</option>
             <option value="ROLE_USER">ROLE_USER</option>
           </select>
-          <select
-            value={form.team}
-            onChange={handleChange("team")}
-            required
-            className="border p-2 rounded"
-          >
-            <option value="">Sélectionner une team</option> 
-            <option value="team">equipe1</option>
-          </select>
+          {role === "ROLE_SUPER_ADMIN" && (
+            <select
+              value={form.team}
+              onChange={handleChange("team")}
+              required
+              className="border p-2 rounded"
+            >
+              <option value="">Sélectionner une team</option>
+              <option value="1">Equipe1</option>
+            </select>
+          )}
         </FormModal>
       )}
     </section>
