@@ -11,7 +11,7 @@ export function useCanDelete (entityType:string){
             return role === "ROLE_SUPER_ADMIN"
         }
         if (role === "ROLE_CLIENT_ADMIN") return false
-        if (role === "DEVELOPER") return false
+        if (role === "ROLE_DEVELOPER") return false
     }
 }
 
@@ -26,6 +26,12 @@ export function useCanEdit (entityType:string){
         // Le SUPER_ADMIN peut tout éditer
         if (role === "ROLE_SUPER_ADMIN") return true
 
+        // ROLE_DEVELOPER : peut éditer serveurs et VMs, pas les users
+        if (role === "ROLE_DEVELOPER"){
+            if (entityType === "server" || entityType === "vm") return true;
+            return false;
+        }
+
         // Serveurs et Vm : seul SUPER_ADMIN a le droit d'éditer
         if (entityType === "server" || entityType === "vm"){
             return role === "ROLE_SUPER_ADMIN"
@@ -37,12 +43,6 @@ export function useCanEdit (entityType:string){
                 return entity?.team?.id === user?.user?.team?.id;
             }
             return false
-        }
-
-        // ROLE_DEVELOPER : peut éditer serveurs et VMs, pas les users
-        if (role === "ROLE_DEVELOPER"){
-            if (entityType === "server" || entityType === "vm") return true;
-            return false;
         }
     }
 }
