@@ -58,7 +58,6 @@ export default function User() {
     };
 
   const handleSubmit = async (e: FormEvent) => {
-    
     e.preventDefault();
     setFormError("");
     const body: any = { ...form, roles: form.roles ? [form.roles] : [] };
@@ -117,10 +116,10 @@ export default function User() {
                   onClick={() => {
                     setEditingUser(user);
                     setForm({
-                      email:(user.email),
-                      name: (user.name),
-                      ssh_user:(user.ssh_user),
-                      firstname: (user.firstname),
+                      email: user.email,
+                      name: user.name,
+                      ssh_user: user.ssh_user,
+                      firstname: user.firstname,
                       roles: Array.isArray(user.roles)
                         ? (user.roles[0] ?? "")
                         : user.roles,

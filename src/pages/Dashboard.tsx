@@ -7,11 +7,11 @@ export default function Dashboard() {
   return (
     <section>
       <h2>Bienvenue sur le dashboard</h2>
-      <Link to="/server">Liste des serveurs</Link>
-      <Link to="/vm">Liste des Vm</Link>
-      <Link to="/user">Liste des users</Link>
-      <Link to="/client">Liste des clients</Link>
-      <Link to="/service">Liste des services</Link>
+      <Link to="/server/me">Liste des serveurs</Link>
+      <Link to="/vm/me">Liste des Vm</Link>
+      <Link to="/user/me">Liste des users</Link>
+      <Link to="/client/me">Liste des clients</Link>
+      <Link to="/service/me">Liste des services</Link>
       <button
         onClick={() => {
           dispatch(logout());
