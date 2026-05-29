@@ -13,7 +13,7 @@ export default function Login() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError("Ce ne sont pas les bons identifiants !");
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}login`, {

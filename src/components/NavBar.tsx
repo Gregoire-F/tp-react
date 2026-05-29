@@ -7,7 +7,7 @@ export default function NavBar() {
   return (
     <header>
       <nav className="border-slate-200 h-30">
-        <h2 className="text-center text-2xl mb-6">Bienvenue sur le dashboard Badger</h2>
+        <h2 className="text-center text-2xl mb-6">Interface Badger</h2>
         <div className="text-l flex justify-center flex-wrap items-center mx-auto max-w-7-xl px-6">
           <div className="flex gap-6">
             <Link to="/server/me">Liste des serveurs</Link>
