@@ -18,6 +18,7 @@ interface UserForm {
   roles: string;
   ip_address: string;
   plain_password?: string;
+  // team?:string; the selected choice is invalid dans le form creation ou edit user bug
 }
 
 const initialForm: UserForm = {
@@ -172,6 +173,15 @@ export default function User() {
             <option value="ROLE_ADMIN">ROLE_CLIENT_ADMIN</option>
             <option value="ROLE_DEVELOPER">ROLE_DEVELOPER</option>
             <option value="ROLE_USER">ROLE_USER</option>
+          </select>
+          <select
+            value={form.team}
+            onChange={handleChange("team")}
+            required
+            className="border p-2 rounded"
+          >
+            <option value="">Sélectionner une team</option> 
+            <option value="team">equipe1</option>
           </select>
         </FormModal>
       )}

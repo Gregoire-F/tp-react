@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useApiCall } from "../lib/api";
 import FormModal from "../components/FormModal";
+import { useCanDelete } from "../lib/access";
 
 interface Server {
   id: number;
@@ -37,6 +38,8 @@ const initialForm: ServerForm = {
 };
 
 export default function Server() {
+  const canDelete = useCanDelete("server")
+
   const { data: servers, error, execute } = useApiCall<Server[]>();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<ServerForm>(initialForm);
