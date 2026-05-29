@@ -68,7 +68,8 @@ export default function Vm() {
   }, [execute, fetchServers, role]);
 
   const handleChange =
-    (field: keyof VmForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    (field: keyof VmForm) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       setForm((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
@@ -116,7 +117,7 @@ export default function Vm() {
   return (
     <section className="flex justify-center flex-col">
       <NavBar />
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row gap-5 mx-auto">
         <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">
           Liste des VM
         </h2>
@@ -130,9 +131,9 @@ export default function Vm() {
         )}
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <ul>
+      <ul className="flex flex-col text-end mx-auto border p-5 bg-slate-50 border-gray-200 items-end">
         {(vm ?? []).map((vm) => (
-          <li key={vm.id}>
+          <li key={vm.id} className="flex gap-3 p-2 border-b-2 border-gray-200">
             {vm.name} -{vm.os} - {vm.cpu} Go -{vm.ram} Go -{vm.stock} -{" "}
             {vm.private_ip} - {vm.public_ip} -{" "}
             {typeof vm.server === "object" ? vm.server.name : vm.server}
@@ -146,7 +147,10 @@ export default function Vm() {
                     cpu: String(vm.cpu),
                     ram: String(vm.ram),
                     stock: String(vm.stock),
-                    server: typeof vm.server === "object" ? String(vm.server.id) : vm.server,
+                    server:
+                      typeof vm.server === "object"
+                        ? String(vm.server.id)
+                        : vm.server,
                   });
                   setShowModal(true);
                 }}
@@ -155,13 +159,14 @@ export default function Vm() {
                 Edit
               </button>
             )}
-            {canDelete(vm) && (<button
-              onClick={() => handleDelete(vm.id)}
-              className="px-4 py-2 bg-red-500 text-white border-0 rounded cursor-pointer"
-            >
-              Supprimer
-            </button>
-          )}
+            {canDelete(vm) && (
+              <button
+                onClick={() => handleDelete(vm.id)}
+                className="px-4 py-2 bg-red-500 text-white border-0 rounded cursor-pointer"
+              >
+                Supprimer
+              </button>
+            )}
           </li>
         ))}
       </ul>

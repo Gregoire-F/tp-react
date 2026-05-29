@@ -75,10 +75,10 @@ export default function Dashboard() {
                   <tr key={server.id} className="border-b">
                     <td className="p-4 align-middle">{server.name}</td>
                     <td className="p-4 align-middle">{osList || "—"}</td>
-                    <td className="p-4 align-middle">{serverVms.length}</td>
-                    <td className="p-4 align-middle">{server.cpu}</td>
-                    <td className="p-4 align-middle">{server.ram}</td>
-                    <td className="p-4 align-middle">{server.stock}</td>
+                    <td className="p-4 align-middle">{serverVms.length}/{serverVms.length}</td>
+                    <td className="p-4 align-middle">{server.cpu} Coeurs</td>
+                    <td className="p-4 align-middle">{server.ram} Go</td>
+                    <td className="p-4 align-middle">{server.stock} Go</td>
                   </tr>
                 );
               })}

@@ -105,14 +105,14 @@ export default function User() {
         )}
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <ul className="flex flex-col text-end mx-auto border p-5 border-gray-200 items-end ">
+      <ul className="flex flex-col text-end mx-auto border p-5 bg-slate-50 border-gray-200 items-end ">
         {Array.isArray(user) &&
           user.map((user) => (
             <li
               key={user.id}
               className="flex gap-3 p-2 border-b-2 border-gray-200"
             >
-              {user.name} - {user.firstname} - {user.email} -  
+              {user.name} - {user.firstname} - {user.email} - {" "}
               {Array.isArray(user.roles) ? user.roles[0] : user.roles}
               {canEdit(null) && (
                 <button

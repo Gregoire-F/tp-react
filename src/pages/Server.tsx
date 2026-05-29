@@ -114,11 +114,11 @@ export default function Server() {
         )}
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <ul className="flex flex-col text-end mx-auto border p-5 border-gray-200 items-end">
+      <ul className="flex flex-col text-end mx-auto border p-5 bg-slate-50 border-gray-200 items-end">
         {(servers ?? []).map((server) => (
           <li key={server.id} className="flex gap-3 p-2 border-b-2 border-gray-200">
             {server.name} -{server.cpu} coeurs -{server.ram} Go -{server.subnet}
-            {server.stock} Go -{server.hypervisor} - {server.public_ip} -
+            {server.stock} Go -{server.hypervisor} - {server.public_ip} - {" "}
             {server.ssh_port}
             {canEdit(server) && (
               <button
