@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useApiCall } from "../lib/api";
+import NavBar from "../components/NavBar";
 interface Service {
   id: number;
   name: string;
@@ -11,6 +12,7 @@ export default function Service() {
   }, [execute]);
   return (
     <section>
+      <NavBar />
       <h2>Liste des services</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>

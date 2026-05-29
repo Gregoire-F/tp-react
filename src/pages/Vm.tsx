@@ -4,6 +4,7 @@ import { useApiCall } from "../lib/api";
 import FormModal from "../components/FormModal";
 import { useCanDelete, useCanEdit } from "../lib/access";
 import { useAppSelector } from "../store/store";
+import NavBar from "../components/NavBar";
 
 interface Vm {
   id: number;
@@ -114,6 +115,7 @@ export default function Vm() {
   };
   return (
     <section className="flex justify-center flex-col">
+      <NavBar />
       <div className="flex flex-row justify-between">
         <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">
           Liste des VM

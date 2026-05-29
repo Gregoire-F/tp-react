@@ -4,6 +4,7 @@ import { useApiCall } from "../lib/api";
 import FormModal from "../components/FormModal";
 import { useCanDelete, useCanEdit } from "../lib/access";
 import { useAppSelector } from "../store/store";
+import NavBar from "../components/NavBar";
 
 interface User {
   id: number;
@@ -89,8 +90,9 @@ export default function User() {
   };
   return (
     <section className="flex justify-center flex-col">
-      <div className="flex flex-row justify-between">
-        <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">
+      <NavBar />
+      <div className="flex flex-row gap-5 mx-auto">
+        <h2 className="font-bold text-xl text-center bg-gray-300 px-4 py-2">
           Liste des users
         </h2>
         {canEdit(null) && (
@@ -106,7 +108,10 @@ export default function User() {
       <ul className="flex flex-col text-end mx-auto border p-5 border-gray-200 items-end ">
         {Array.isArray(user) &&
           user.map((user) => (
-            <li key={user.id} className="flex gap-3 p-2 border-b-2 border-gray-200">
+            <li
+              key={user.id}
+              className="flex gap-3 p-2 border-b-2 border-gray-200"
+            >
               {user.name} -{user.firstname} -{user.email}
               {Array.isArray(user.roles) ? user.roles[0] : user.roles}
               {canEdit(null) && (

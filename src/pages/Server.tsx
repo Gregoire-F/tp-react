@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { useApiCall } from "../lib/api";
 import FormModal from "../components/FormModal";
 import { useCanDelete, useCanEdit } from "../lib/access";
+import NavBar from "../components/NavBar";
 
 interface Server {
   id: number;
@@ -98,6 +99,7 @@ export default function Server() {
   };
   return (
     <section className="flex justify-center flex-col">
+      <NavBar />
       <div className="flex flex-row justify-between">
         <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">
           Liste des serveurs
