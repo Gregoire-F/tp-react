@@ -112,7 +112,7 @@ export default function User() {
               key={user.id}
               className="flex gap-3 p-2 border-b-2 border-gray-200"
             >
-              {user.name} -{user.firstname} -{user.email}
+              {user.name} - {user.firstname} - {user.email} -  
               {Array.isArray(user.roles) ? user.roles[0] : user.roles}
               {canEdit(null) && (
                 <button

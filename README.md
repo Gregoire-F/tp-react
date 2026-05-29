@@ -6,7 +6,7 @@ Version de TailwindCSS : 4.3.0
 Voici ce que j'ai pas eu le temps de faire :
 
 
-Gestion des services avec vm et serveurs.
 UI plus travaillée
+
+
 Faire toutes les pages de l'API (client, services)
-Erreur dans l'Edit d'un User

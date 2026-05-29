@@ -100,7 +100,7 @@ export default function Server() {
   return (
     <section className="flex justify-center flex-col">
       <NavBar />
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row gap-5 mx-auto">
         <h2 className="font-bold text-xl bg-gray-300 px-4 py-2">
           Liste des serveurs
         </h2>
@@ -114,9 +114,9 @@ export default function Server() {
         )}
       </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <ul>
+      <ul className="flex flex-col text-end mx-auto border p-5 border-gray-200 items-end">
         {(servers ?? []).map((server) => (
-          <li key={server.id}>
+          <li key={server.id} className="flex gap-3 p-2 border-b-2 border-gray-200">
             {server.name} -{server.cpu} coeurs -{server.ram} Go -{server.subnet}
             {server.stock} Go -{server.hypervisor} - {server.public_ip} -
             {server.ssh_port}
